@@ -2,6 +2,7 @@
 
 //every page needing to restrict access only to logged in users must include this file
 require_once('./includes/authenticate.inc.php');
+
 require_once('./includes/Users.php');
 require_once('./includes/DateConversion.php');
 
@@ -110,7 +111,7 @@ $dateClass = new DateConversion();
 
 
 	<article id="footer">
-		<?php include_once("includes/footer.inc.php"); //include the 2nd footer here ?>
+		<?php include_once("includes/footer.inc.php"); ?>
 		<div class="clearer"></div>
 	</article>
 

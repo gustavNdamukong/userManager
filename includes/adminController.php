@@ -47,8 +47,6 @@ class adminController  {
 
     public function __construct(Validator $validator, Users $users)
     {
-        //$this->validator = new Validator();
-        //$this->user = new Users();
         $this->validator = $validator;
         $this->user = $users;
     }
@@ -59,15 +57,9 @@ class adminController  {
                                 
     public function login()
     {
-        //echo '<pre>';
-        //var_dump($_REQUEST); die();
-
-
         $username = $password = $rem_me = $fail = $email = false;
         $errors = array();
 
-
-        //die(print_r($_POST));
         if(isset($_POST['username']))
         {
             $username = $this->validator->fix_string($_POST['username']);
@@ -98,7 +90,6 @@ class adminController  {
         {
             //connect to DB
             //authenticate the user as the admin, create the session id, and redirect appropriately
-
             $authenticated = $this->authenticate($username, $password, $rem_me);
 
         }
@@ -120,7 +111,7 @@ class adminController  {
         if ($authenticated = $this->user->authenticateUser($username, $password))
         {
             //A match was found
-            //I will only set a cookie if the user chose to be remembered
+            //set a cookie if the user chose to be remembered
             if ($rem_me)
             {
                 setcookie('rem_me', $username, time() + 172800); //48 hours
@@ -152,7 +143,7 @@ class adminController  {
             setcookie(session_name(), '', time() - 86400, '/');
         }
 
-        //This is the cookie i set with rem_me at log in, we delete it coz if the user wants to be logged out.
+        //Delete 'remember' cookie if any.
         if (isset($_COOKIE['rem_me']))
         {
             setcookie('rem_me', '', time()-86400);

@@ -7,8 +7,6 @@ require_once('./includes/DB_Adapter.php');
 $validator = new Validator();
 $user = new Users;
 $adminController = new \adminController($validator, $user);
-//$adminController = new \adminController();
-
 ?>
 
 <!DOCTYPE HTML>
@@ -71,10 +69,7 @@ $adminController = new \adminController($validator, $user);
 											<input type="checkbox" id="signin-remember" name="rem_me">
 											Remember me </label>
 									</div>
-									<!--<a id="forgot_pass" name="forgot_pass" href="#">Forgot password?</a>-->
 									<br />
-									<!--<input type="email" maxlength="40" class="form-control loginfieldinput" id="forgot_pass_input" name="forgot_pass_input" placeholder="Email address here" style="display: none; margin-top: 5px;" /><span style="display: none; margin-top: 5px;" class="loginfieldinput" id="forgot_pass_info">&nbsp;&larr;<font color=blue>Enter your email address to receive your password</font></span>
-									<input id="forgotstatus" type="hidden" name="forgotstatus" value="no" />-->
 								</div>
 								<button type="submit" name="login_submit" class="btn btn-primary btn-lg">Sign in</button>
 							</form>
@@ -90,7 +85,7 @@ $adminController = new \adminController($validator, $user);
 
 
 	<article id="footer">
-		<?php include_once("includes/footer.inc.php"); //include the 2nd footer here ?>
+		<?php include_once("includes/footer.inc.php"); ?>
 		<div class="clearer"></div>
 	</article>
 

@@ -28,9 +28,6 @@ require_once('settings.php');
      protected $whoCalledMe = '';
 
 
-     /////protected $model = '';
-
-
 
     /**
      * All models extend from this class and share its awesome methods. For it to be of use to them, it needs to know which model called it
@@ -201,8 +198,6 @@ require_once('settings.php');
      */
      public function insert($table, $data, $dataTypes)
      {
-         //die('WE ABOUT TO INSERT');
-         //die($dataTypes); //.' '.$data.' '.$dataTypes);///////////////
          // Check for $table or $data not set
          if ( empty( $table ) || empty( $data ) ) {
              return false;
@@ -224,16 +219,12 @@ require_once('settings.php');
 
          $stmt = $db->stmt_init();
 
-         //die("INSERT INTO {$table} ({$fields}) VALUES ({$placeholders})");//////////////////////
-
          // Prepare our query for binding
          $stmt->prepare("INSERT INTO {$table} ({$fields}) VALUES ({$placeholders})");
 
 
          // Dynamically bind values
          call_user_func_array( array( $stmt, 'bind_param'), $this->ref_values($values));
-         //this code above does the equiv of this line below:
-         //$stmt->bind_param('ssssssiis', $user_type, $firstname, $surname, $email, $password, $key, $customer_status, $emailverified, $finalwords);
 
          // Execute the query
          $stmt->execute();
@@ -303,11 +294,8 @@ require_once('settings.php');
          // Prepend $format onto $values
          array_unshift($values, $dataTypes);
          $values = array_merge($values, $where_values);
-         //die(print_r($values));/////
 
-         //die("UPDATE {$table} SET {$placeholders} WHERE {$where_clause}"); /////////////////////
-
-         $stmt = $db->prepare("UPDATE {$table} SET {$placeholders} WHERE {$where_clause}"); ///////////
+         $stmt = $db->prepare("UPDATE {$table} SET {$placeholders} WHERE {$where_clause}");
 
          call_user_func_array( array( $stmt, 'bind_param'), $this->ref_values($values));
 
@@ -379,7 +367,6 @@ require_once('settings.php');
 
 
              // Prepend $format onto $values
-             //$where_values now becomes something like this: ['s', 'Gustav'] (for bind_param())
              array_unshift($where_values, $dataTypes);
 
              $stmt = $db->prepare("DELETE FROM {$table} WHERE {$where_placeholders}");
@@ -394,7 +381,7 @@ require_once('settings.php');
                  return true;
              }
              //if there was no record in the DB no msg will be returned,
-             // but we need some kinda msg to come back n give us a sign, so we put another return line here below
+             // so we put another return line here below
              return true;
          }
 
@@ -421,7 +408,6 @@ require_once('settings.php');
         $values = array();
 
         // Loop through $data and build $fields, $placeholders, and $values
-        /////echo '<pre>'; die(print_r($data)); ///////////
         foreach ( $data as $field => $value )
         {
             //added this to stop 'key' from being inserted as a table field, which is wrong
@@ -492,42 +478,6 @@ require_once('settings.php');
         }
         return $refs;
     }
-
-
-
-
-
-     /**
-      * return all records from any model
-      *
-      * @param string $orderBy If you have a column named TABLENAME_'name' then the results will be auto ordered by this field.
-      * However, if you called this column something else and want to order it by it, you will have to pass the column name to it
-      * @return array|bool|mixed
-      */
-     /*public function getAll($orderBy = '')
-     {
-         $model = new $this->whoCalledMe;
-         $table = $model->getTable();
-
-         if ($orderBy == '')
-         {
-             $order = array_key_exists($table.'_name',$model->getColumnDataTypes()) ?  ' ORDER BY '.$table.'_username' : '';
-         }
-         else
-         {
-             $order = ' ORDER BY '.$orderBy;
-         }
-
-         $query = "SELECT * FROM ".$table.$order;
-
-         $everything = $this->query($query);
-
-         //if ($everything != 'failed') (we have changed it to return true as below)
-         if ($everything)
-         {
-             return $everything;
-         }
-     }*/
 
 
 

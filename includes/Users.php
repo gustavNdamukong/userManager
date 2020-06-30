@@ -5,13 +5,6 @@ require_once('DB_Adapter.php');
 require_once('settings.php');
 require_once('Validator.php');
 
-
-//if (isset($_POST['createUser'])) {
- //   $user = new Users;
- //   $user->createUser($_POST);
-//}
-
-
     /** ############## Properties and Methods all model classes must have to get the full power of the Dorguzen ###############
      * Must extend DB_ADAPTER
 
@@ -177,10 +170,6 @@ require_once('Validator.php');
         
         public function get_dataTypes($purpose)
         {
-            //purposes are:
-            // regis
-            // login
-            //create_user
             return $this->{$purpose.'DataTypes'};
             
         }
@@ -209,11 +198,8 @@ require_once('Validator.php');
 
             //add one for the password 'key' value which must be represented but does not exist as a column in the users table
             $dataTypes .= 's';
-            /////$dataTypes = $this->get_dataTypes('login');
-            //die($dataTypes);///////////////////////////////////////
 
             $sql = "SELECT * FROM ".$this->getTable()." WHERE users_username = ? AND users_pass = AES_ENCRYPT(?, ?)";
-            //die($sql);///////////////////////////////////////
 
             $stmt = $connect->stmt_init();
             $stmt->prepare($sql);
@@ -250,9 +236,6 @@ require_once('Validator.php');
 
                     //Now user is logged in, redirect them to their appropriate pages
                     session_write_close();
-
-                    //echo '<pre>';
-                    //die(print_r($_SESSION));
                 }
 
                return true;
@@ -272,12 +255,10 @@ require_once('Validator.php');
 
         public function getAllUsers()
         {
-            /////$settings = new settings();
             $settings = $this->settings;
             $connect = $this->connect();
 
             $key = $this->settings->getSettings()['DBcredentials']['key'];
-            /////$key = $settings->getSettings()['DBcredentials']['key'];
 
 
             $sql = "SELECT users_id, users_type, users_username, AES_DECRYPT(users_pass, '$key') AS pass, users_created FROM users";
@@ -293,10 +274,8 @@ require_once('Validator.php');
 
         public function getUserById($userId)
         {
-            /////$settings = new settings();
             $connect = $this->connect();
 
-            /////$key = $settings->getSettings()['DBcredentials']['key'];
             $key = $this->settings->getSettings()['DBcredentials']['key'];
 
 
@@ -315,26 +294,19 @@ require_once('Validator.php');
 
         public function createUser()
         {
-            //echo '<pre>'.' from CREATEUSER()';
-            //var_dump($_REQUEST); die();
-            /////$val = new Validator();
-            /////$settings = new settings();
             $fail = false;
 
             //sanitize the submitted values
             if (isset($_POST['user_type']))
             {
-                /////$usertype = $val->fix_string($_POST['user_type']);
                 $usertype = $this->_validator->fix_string($_POST['user_type']);
             }
             if (isset($_POST['username']))
             {
-                /////$username = $val->fix_string($_POST['username']);
                 $username = $this->_validator->fix_string($_POST['username']);
             }
             if (isset($_POST['password']))
             {
-                /////$password= $val->fix_string($_POST['password']);
                 $password= $this->_validator->fix_string($_POST['password']);
             }
 
@@ -342,9 +314,8 @@ require_once('Validator.php');
 
 
             //validate the submitted values
-            /////$fail = $val->validate_username($username);
             $fail = $this->_validator->validate_username($username);
-            /////$fail .= $val->validate_password($password);
+
             $fail .= $this->_validator->validate_password($password);
 
             if ($usertype == '')
@@ -355,7 +326,6 @@ require_once('Validator.php');
             if ($fail == "")
             {
                 //Get ready to save the new user
-                /////$key = $settings->getSettings()['DBcredentials']['key'];
                 $key = $this->settings->getSettings()['DBcredentials']['key'];
 
                 $table = $this->getTable();
@@ -370,8 +340,6 @@ require_once('Validator.php');
 
                 $datatypes = '';
                 $usersDataClues = $this->getColumnDataTypes();
-
-                //echo '<pre>'; var_dump($usersDataClues); die();//////////////////////
 
                 //prepare the datatypes for the query (a string is needed)
                 foreach ($usersDataClues as $dataClueKey => $columnDatClue)
@@ -422,9 +390,6 @@ require_once('Validator.php');
 
         public function editUser ($userData)
         {
-            //echo '<pre>'; die(print_r($userData)); ///////////
-            //$val = new Validator();
-
             //sanitize the submitted values
             if (isset($userData['userId']))
             {
@@ -543,8 +508,7 @@ require_once('Validator.php');
 
             }
 
-            //The 'Where' clause also needs to have its own matched datatypes separately from the data itself, so let's work it out
-            //-----------------------------------------------------------
+            //The 'Where' clause also needs to have its own matched datatypes separate from the data itself
             foreach ($where as $field => $val)
             {
                 if (array_key_exists($field, $this->_columns)) {
@@ -552,7 +516,7 @@ require_once('Validator.php');
                     array_push($datatypes, $this->_columns[$field]);
                 }
             }
-            //------------------------------------------------------------
+
 
             //Convert datatypes into a string
             $datatypes = implode($datatypes);
@@ -561,15 +525,11 @@ require_once('Validator.php');
             //get this model's tablename
             $table = $this->getTable();
 
-            /////echo '<pre>'; die(print_r($data)); ///////////
-
             //do the update
             $updated = $this->update($table, $data, $datatypes, $where);
-            //if ($saved == 'saved') { (we have changed it to return true as below)
+
             if ($updated) {
                 return $updated;
-                //if ($saved == 'saved') {
-                //return 'saved';
             }
             elseif ($updated == 1062) {
                 return 'duplicate';
@@ -598,7 +558,6 @@ require_once('Validator.php');
          */
         public function deleteWhere($criteria = array())
         {
-            //echo '<pre>'; var_dump($criteria); die('FROM deleteWhere()');//////
             foreach ($criteria as $key => $crits)
             {
                 $datatypes = '';

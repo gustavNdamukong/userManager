@@ -28,7 +28,7 @@
 				'DBcredentials' => [
 					'username' => 'partyman',
 					'pwd' => 'party123',
-					'db' => 'pass_manager',
+					'db' => 'user_manager',
 					'host' => 'localhost',
 					'connectionType' => 'mysqli',
 					'key' => 'takeThisWith@PinchOfSalt'

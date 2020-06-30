@@ -10,16 +10,11 @@ require_once('./includes/DB_Adapter.php');
 
 $validator = new Validator();
 $user = new Users;
+
 //pass to the User its validator dependency
 $user->setValidator($validator);
 
 $adminController = new \adminController($validator, $user);
-
-/*if ($_POST) {
-	echo '<pre>';
-	var_dump($_POST);
-	die();
-}*/
 
 //only admin users are allowed to be on this page to edit stuff
 if ($_SESSION['user_type'] != 'admin')
@@ -113,7 +108,6 @@ if (isset($_POST['editUser'])) {
 
 						<div class="col-lg-2"></div>
 						<div class="form col-lg-8">
-							<!--<form action="./includes/Users.php" method="post">-->
 							<form action="" method="post">
 								<label for="user_type">User Type</label>
 								<select id="user_type" name="user_type" class="form-control">
@@ -127,10 +121,8 @@ if (isset($_POST['editUser'])) {
 
 								<label for="password">Password</label>
 								<input placeholder="Password" id="password" name="password" class="form-control" type="text" <?php if (isset($userForEdit)) { ?> value="<?=$userForEdit[0]['pass']?>" <?php } ?> />
-								<?php //if (isset($userForEdit)) { ?>
 								<input id="userId" name="userId" type="hidden" <?php if (isset($userForEdit)) { ?> value="<?=$userForEdit[0]['users_id']?>" <?php } ?> />
 								<input type="hidden" id="createUser" <?php if (isset($_GET['ed'])) { ?> name="editUser" <?php } else { ?> name="createUser" <?php } ?>>
-								<?php //} ?>
 								<button type="submit" class="btn btn-primary btn-lg">Create User</button>
 							</form>
 
@@ -145,7 +137,7 @@ if (isset($_POST['editUser'])) {
 
 
 	<article id="footer">
-		<?php include_once("includes/footer.inc.php"); //include the 2nd footer here ?>
+		<?php include_once("includes/footer.inc.php"); ?>
 		<div class="clearer"></div>
 	</article>
 
