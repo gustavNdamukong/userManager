@@ -79,7 +79,7 @@ $dateClass = new DateConversion();
 					<table class="table table-bordered table-responsive">
 						<thead>
 							<tr><td colspan="6" class="tableHead"><h2>Users</h2></td></tr>
-							<tr><td colspan="6"><a href="/passManager/createUser.php" class="btn btn-primary btn-md">Create New User</a></td></tr>
+							<tr><td colspan="6"><a href="/userManager/createUser.php" class="btn btn-primary btn-md">Create New User</a></td></tr>
 							<tr>
 								<th class="col-xs-3">Username</th>
 								<th class="col-xs-3">Type</th>
@@ -96,7 +96,7 @@ $dateClass = new DateConversion();
 								<td><?=$user['users_type']?></td>
 								<td><?=$user['pass']?></td>
 								<td><?=$dateClass->YYYYMMDDtoDDMMYYYY($user['users_created'])?></td>
-								<td><a href="/passManager/createUser.php?ed=1&uid=<?=$user['users_id']?>" class="btn btn-warning btn-sm">Edit</a></td>
+								<td><a href="/userManager/createUser.php?ed=1&uid=<?=$user['users_id']?>" class="btn btn-warning btn-sm">Edit</a></td>
 								<td><a onClick="return confirm('Are you sure you wish to delete this user? This action cannot be undone')" href="./includes/adminController.php?delu=<?=$user['users_id']?>" class="btn btn-danger btn-sm">Delete</a></td>
 							</tr>
 						<?php }

@@ -123,7 +123,7 @@ if (isset($_POST['editUser'])) {
 								<input placeholder="Password" id="password" name="password" class="form-control" type="text" <?php if (isset($userForEdit)) { ?> value="<?=$userForEdit[0]['pass']?>" <?php } ?> />
 								<input id="userId" name="userId" type="hidden" <?php if (isset($userForEdit)) { ?> value="<?=$userForEdit[0]['users_id']?>" <?php } ?> />
 								<input type="hidden" id="createUser" <?php if (isset($_GET['ed'])) { ?> name="editUser" <?php } else { ?> name="createUser" <?php } ?>>
-								<button type="submit" class="btn btn-primary btn-lg">Create User</button>
+								<button type="submit" class="btn btn-primary btn-lg"><?=isset($_GET['ed'])?'Edit User':'Create User'?></button>
 							</form>
 
 						</div>

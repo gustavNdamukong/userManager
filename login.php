@@ -7,6 +7,7 @@ require_once('./includes/DB_Adapter.php');
 $validator = new Validator();
 $user = new Users;
 $adminController = new \adminController($validator, $user);
+
 ?>
 
 <!DOCTYPE HTML>
@@ -56,7 +57,6 @@ $adminController = new \adminController($validator, $user);
 							{
 								echo "<p style='color: red; background-color: white;margin-left:30%;'>There was an error, check you details and try again</p>";
 							} ?>
-
 
 						<div class="col-lg-2"></div>
 						<div class="form col-lg-8">

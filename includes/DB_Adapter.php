@@ -53,7 +53,6 @@ require_once('settings.php');
         $this->host = $credentials['host'];
         $this->connectionType = $credentials['connectionType'];
         $this->salt = $credentials['key'];
-
     }
 
 
@@ -95,6 +94,16 @@ require_once('settings.php');
 
 
 
+     public function getSalt()
+     {
+         $salt = (string) $this->salt;
+
+         return $salt;
+     }
+
+
+
+
 
 
 
@@ -122,16 +131,88 @@ require_once('settings.php');
                  $results[] = $row;
              }
 
-             return $results;
+             $columns = $results;
+
+             if (is_array($columns)) {
+                 foreach ($columns as $column) {
+                     if (preg_match('/int/', $column['Type'])) {
+                         $val = 'i';
+                     }
+                     if (preg_match('/varchar/', $column['Type'])) {
+                         $val = 's';
+                     }
+                     if (preg_match('/text/', $column['Type'])) {
+                         $val = 's';
+                     }
+                     if (preg_match('/timestamp/', $column['Type'])) {
+                         $val = 's';
+                     }
+                     if (preg_match('/enum/', $column['Type'])) {
+                         $val = 's';
+                     }
+                     if (preg_match('/blob/', $column['Type'])) {
+                         $val = 's';
+                     }
+                     if (preg_match('/decimal/', $column['Type'])) {
+                         $val = 'd';
+                     }
+                     if (preg_match('/date/', $column['Type'])) {
+                         $val = 's';
+                     }
+                     if (preg_match('/float/', $column['Type'])) {
+                         $val = 'd';
+                     }
+
+                     $model->_columns[$column['Field']] = $val;
+                 }
+             }
          }
-         else
-         //check result if Updating/inserting/deleting
-         if ((isset($result->affected_rows)) && ($result->affected_rows > 0))
-         {
-             return true;
+         else {
+             //check result if Updating/inserting/deleting
+             if ((isset($result->affected_rows)) && ($result->affected_rows > 0)) {
+                 return true;
+             }
          }
 
          return false;
+
+     }
+
+
+
+
+
+
+
+     public function __set($member, $value)
+     {
+         if (array_key_exists($member, $this->_columns)) {
+             $this->$member = $value;
+         }
+     }
+
+
+
+
+
+     /**
+      * This member being retrieved must have been created already using __set() above
+      */
+     public function __get($member)
+     {
+         if (array_key_exists($member, $this->_columns)) {
+             return $this->$member;
+         }
+     }
+
+
+
+
+
+
+     public function getColumnDataTypes()
+     {
+         return $this->_columns;
      }
 
 
@@ -141,6 +222,139 @@ require_once('settings.php');
 
 
 
+     public function getTable()
+     {
+         return lcfirst(get_class($this));
+     }
+
+
+
+
+
+
+
+
+
+
+
+
+     public function updateObject($where)
+     {
+         $model = new $this->whoCalledMe;
+
+         //prepare the data to make up the query
+         $data = array();
+         $datatypes = array();
+
+
+         foreach (get_object_vars($this) as $property => $value) {
+             //filter out any properties that are not in ur columns array
+             if (array_key_exists($property, $model->_columns)) {
+                 //set the field n value
+                 if ($property == 'users_pass')
+                 {
+                     //store the 2 pieces of data needed for passwords ('users_pass' and 'key')
+                     $key = $this->getSalt();
+                     $data[$property] = $value;
+                     $data['key'] = $key;
+
+                     //store the 2 pieces of datatypes needed for passwords (is)
+                     array_push($datatypes, $model->_columns[$property]);
+                     //we add an extra string character for the case of 'users_pass' coz of its associated salt encryption string
+                     array_push($datatypes, 's');
+                 }
+                 else {
+                     $data[$property] = $value;
+
+                     //set the field datatype
+                     array_push($datatypes, $model->_columns[$property]);
+                 }
+             }
+
+         }
+
+
+         //The 'Where' clause also needs to have its own matched datatypes separately from the data itself
+         // this is needed by the placeholders of the mysqli prepared statement
+         //-----------------------------------------------------------
+         foreach ($where as $field => $val)
+         {
+             if (array_key_exists($field, $model->_columns)) {
+                 //add to the field datatypes
+                 array_push($datatypes, $model->_columns[$field]);
+             }
+         }
+         //------------------------------------------------------------
+
+         //Convert datatypes into a string
+         $datatypes = implode($datatypes);
+
+
+         //get this model's tablename
+         $table = $this->getTable();
+
+         //do the update
+         $updated = $this->update($table, $data, $datatypes, $where);
+         if ($updated == 1062) {
+             return 'duplicate';
+         }
+         elseif ($updated) {
+             return true;
+         }
+         else {
+             return false;
+         }
+
+     }
+
+
+
+
+
+
+
+     /**
+      * delete based on any criteria desired
+      *
+      * this method prepares the args ($table, $where criteria, and $dataTypes) before passing these args to delete()
+      *
+      * @param array $criteria which is the criteria to delete reocords in this model based on. For example, if we are deleting an album, $criteria will contain
+      *   something like ['albums_name' => 'Birthday']
+      *
+      * @return string
+      */
+     public function deleteWhere($criteria = array())
+     {
+         foreach ($criteria as $key => $crits)
+         {
+             $datatypes = '';
+             $where = array();
+             //securely check that that field exists n DB table
+             if (!array_key_exists($key, $this->_columns)) {
+                 return 'The field ' . $key . ' does not exist in the ' . strtolower($this->getTable() . ' table');
+             }
+             else {
+                 $where[$key] = $crits;
+                 $datatypes .= $this->_columns[$key];
+             }
+         }
+
+         $table = $this->getTable();
+
+         $deleted = $this->delete($table, $where, $datatypes);
+
+         if ($deleted)
+         {
+             header('Location: /userManager/dashboard.php?del=1');
+             exit();
+         }
+     }
+
+
+     
+     
+     
+     
 
      /**
       *
@@ -275,7 +489,7 @@ require_once('settings.php');
 
          //Format where clause
          $where_clause = '';
-         $where_values = '';
+         $where_values = [];
          $count = 0;
 
          foreach ( $where as $field => $value )
@@ -286,10 +500,8 @@ require_once('settings.php');
 
              $where_clause .= $field . '=?';
              $where_values[] = $value;
-
              $count++;
          }
-
 
          // Prepend $format onto $values
          array_unshift($values, $dataTypes);
@@ -351,7 +563,7 @@ require_once('settings.php');
 
              //Format where clause
              $where_placeholders = '';
-             $where_values = '';
+             $where_values = [];
              $count = 0;
 
              foreach ($where as $field => $value) {

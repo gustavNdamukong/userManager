@@ -5,28 +5,22 @@ require_once('DB_Adapter.php');
 require_once('settings.php');
 require_once('Validator.php');
 
-    /** ############## Properties and Methods all model classes must have to get the full power of the Dorguzen ###############
-     * Must extend DB_ADAPTER
+/** ############## Properties and Methods all model classes must have to get the full power of the Dorguzen ###############
+ * Must extend the parent model DGZ_DB_ADAPTER
 
-    ##### PROPERTIES ######################
-     * private $_columns = array();
-     * private $_hasParent = array();
-     * private $_hasChild = array();
+##### PROPERTIES ######################
+ * protected $_columns = array();
+ * private $_hasParent = array();
+ * private $_hasChild = array();
 
-    ##### CONSTRUCTOR ######################
-     * Must call the parent constructor
-     * Must call loadORM(), then loop through its results and populate its _columns array property
+##### CONSTRUCTOR ######################
+ * Must call the parent constructor
+ * Must call loadORM(), which queries its table, then loops through the results and populates its _columns member array
 
-    ##### METHODS ######################
-     * getColumnDataTypes()
-     * __set($member, $value)
-     * __get($member)
-     * getTable()
-     * save()
-     * updateObject($where)
-     * deleteWhere()
-     *
-     */
+##### METHODS ######################
+ * It has access to all its patent's methods, and you can add yours
+ *
+ */
 
 
 
@@ -36,10 +30,7 @@ require_once('Validator.php');
     class Users extends DB_Adapter
     {
 
-        private $_columns = array();
-
-
-        private $_adapter = null;
+        protected $_columns = array();
 
 
         private $_validator = null;
@@ -51,48 +42,10 @@ require_once('Validator.php');
         {
             parent::__construct();
 
-            //build the map of the table columns and datatypes. Note we have created before hand a private member called '_columns' wh will hold column names n datatypes
-            //only your model class will write to n read from this member
             $columns = $this->loadORM($this);
-            //echo '<pre>'; print_r($columns); die();//////////////
-
-            if (is_array($columns)) {
-                foreach ($columns as $column) {
-                    if (preg_match('/int/', $column['Type'])) {
-                        $val = 'i';
-                    }
-                    if (preg_match('/varchar/', $column['Type'])) {
-                        $val = 's';
-                    }
-                    if (preg_match('/enum/', $column['Type'])) {
-                        $val = 's';
-                    }
-                    if (preg_match('/text/', $column['Type'])) {
-                        $val = 's';
-                    }
-                    if (preg_match('/blob/', $column['Type'])) {
-                        $val = 's';
-                    }
-                    if (preg_match('/timestamp/', $column['Type'])) {
-                        $val = 's';
-                    }
-
-                    $this->_columns[$column['Field']] = $val;
-                }
-            }
         }
 
 
-
-
-
-
-        public function __set($member, $value)
-        {
-            if (array_key_exists($member, $this->_columns)) {
-                $this->$member = $value;
-            }
-        }
 
 
 
@@ -114,65 +67,6 @@ require_once('Validator.php');
 
 
 
-
-
-
-        /**
-         * This member being retrieved must have been created already using __set() above
-         */
-        public function __get($member)
-        {
-            if (array_key_exists($member, $this->_columns)) {
-                return $this->$member;
-            }
-        }
-
-
-
-
-
-
-
-
-        public function getColumnDataTypes()
-        {
-            return $this->_columns;
-        }
-
-
-
-
-
-
-
-
-        public function getTable()
-        {
-            return strtolower(get_class($this));
-        }
-
-
-
-        
-
-
-        //This is the only model that uses this method, as it's specific to user authentication
-        public function getSalt()
-        {
-            $salt = (string) $this->salt;
-
-            return $salt;
-        }
-
-
-
-        
-        
-        public function get_dataTypes($purpose)
-        {
-            return $this->{$purpose.'DataTypes'};
-            
-        }
 
 
         
@@ -272,6 +166,8 @@ require_once('Validator.php');
         }
 
 
+
+
         public function getUserById($userId)
         {
             $connect = $this->connect();
@@ -309,9 +205,6 @@ require_once('Validator.php');
             {
                 $password= $this->_validator->fix_string($_POST['password']);
             }
-
-
-
 
             //validate the submitted values
             $fail = $this->_validator->validate_username($username);
@@ -479,109 +372,6 @@ require_once('Validator.php');
         }
 
 
-
-
-
-
-
-
-
-
-
-
-        public function updateObject($where)
-        {
-            //prepare the data to make up the query
-            $data = array();
-            $datatypes = array();
-
-
-            foreach (get_object_vars($this) as $property => $value) {
-                //filter out any properties that are not in ur columns array
-                if (array_key_exists($property, $this->_columns)) {
-                    //set the field n value
-                    $data[$property] = $value;
-
-                    //set the field datatype
-                    array_push($datatypes, $this->_columns[$property]);
-                }
-
-            }
-
-            //The 'Where' clause also needs to have its own matched datatypes separate from the data itself
-            foreach ($where as $field => $val)
-            {
-                if (array_key_exists($field, $this->_columns)) {
-                    //add to the field datatypes
-                    array_push($datatypes, $this->_columns[$field]);
-                }
-            }
-
-
-            //Convert datatypes into a string
-            $datatypes = implode($datatypes);
-
-
-            //get this model's tablename
-            $table = $this->getTable();
-
-            //do the update
-            $updated = $this->update($table, $data, $datatypes, $where);
-
-            if ($updated) {
-                return $updated;
-            }
-            elseif ($updated == 1062) {
-                return 'duplicate';
-            }
-            else {
-                return 'failed';
-            }
-
-        }
-
-
-
-
-
-
-
-        /**
-         * delete based on any criteria desired
-         *
-         * this method prepares the args ($table, $where criteria, and $dataTypes) before passing these args to delete()
-         *
-         * @param array $criteria which is the criteria to delete reocords in this model based on. For example, if we are deleting an album, $criteria will contain
-         *   something like ['albums_name' => 'Birthday']
-         *
-         * @return string
-         */
-        public function deleteWhere($criteria = array())
-        {
-            foreach ($criteria as $key => $crits)
-            {
-                $datatypes = '';
-                $where = array();
-                //securely check that that field exists n DB table
-                if (!array_key_exists($key, $this->_columns)) {
-                    return 'The field ' . $key . ' does not exist in the ' . strtolower($this->getTable() . ' table');
-                }
-                else {
-                    $where[$key] = $crits;
-                    $datatypes .= $this->_columns[$key];
-                }
-            }
-
-            $table = $this->getTable();
-
-            $deleted = $this->delete($table, $where, $datatypes);
-
-            if ($deleted)
-            {
-                header('Location: /userManager/dashboard.php?del=1');
-                exit();
-            }
-        }
 
 
         

@@ -1,5 +1,4 @@
-
-## USERS
+# USERS
 
     -The system has two types of users
         'admin' user and a
@@ -19,7 +18,7 @@
         admin - username: fritz password: 06111007
 
 
-## DATABASE SETUP
+# DATABASE SETUP
 
     -DB type used is a MySQL DB
     -Create a database called 'user_manager'

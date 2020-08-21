@@ -35,20 +35,6 @@
 				],
 
 
-
-
-				/*
-				|--------------------------------------------------------------------------
-				| SITE CONTACT DETAILS AND EMAIL SETTINGS
-				|--------------------------------------------------------------------------
-				|
-				| The contact details of this site, like emails addresses, phone numbers, fax, postal addresses etc
-				|
-				*/
-
-				//'appEmail' => 'gustavfn@yahoo.co.uk',
-
-
 			];
 		}
 	}
