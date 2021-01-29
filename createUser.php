@@ -1,5 +1,5 @@
 <?php
-//every page needing to restrict access only to logged in users must include this file
+
 require_once('./includes/authenticate.inc.php');
 
 require_once('./includes/adminController.php');
@@ -39,7 +39,6 @@ if (isset($_POST['createUser'])) {
 
 //handle editing a user
 if (isset($_POST['editUser'])) {
-	/////$user = new Users;
 	$user->editUser($_POST);
 }
 
@@ -100,10 +99,7 @@ if (isset($_POST['editUser'])) {
 							{
 								echo "<p style='color: red; background-color: white;margin-left:30%;'>Please complete all fields</p>";
 							}
-							if ((isset($_GET['uo'])) && ($_GET['uo'] == '1')) //user was updated
-							{
-								echo "<p style='color: green; background-color: white;margin-left:30%;'>The user was successfully updated</p>";
-							} ?>
+							?>
 
 
 						<div class="col-lg-2"></div>
@@ -120,9 +116,10 @@ if (isset($_POST['editUser'])) {
 								<input placeholder="Username" id="username" name="username" class="form-control" type="text" <?php if (isset($userForEdit)) { ?> value="<?=$userForEdit[0]['users_username']?>" <?php } ?> />
 
 								<label for="password">Password</label>
-								<input placeholder="Password" id="password" name="password" class="form-control" type="text" <?php if (isset($userForEdit)) { ?> value="<?=$userForEdit[0]['pass']?>" <?php } ?> />
+								<input placeholder="Password" id="password" name="password" class="form-control" type="password" <?php if (isset($userForEdit)) { ?> value="<?=$userForEdit[0]['pass']?>" <?php } ?> />
 								<input id="userId" name="userId" type="hidden" <?php if (isset($userForEdit)) { ?> value="<?=$userForEdit[0]['users_id']?>" <?php } ?> />
 								<input type="hidden" id="createUser" <?php if (isset($_GET['ed'])) { ?> name="editUser" <?php } else { ?> name="createUser" <?php } ?>>
+								<a href="/userManager/dashboard.php" class="btn btn-warning btn-lg">Cancel</a>
 								<button type="submit" class="btn btn-primary btn-lg"><?=isset($_GET['ed'])?'Edit User':'Create User'?></button>
 							</form>
 

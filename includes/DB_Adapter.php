@@ -4,29 +4,12 @@ require_once('settings.php');
 
  class DB_Adapter
  {
-     protected $settings;
 
-
-     protected $host = '';
-
-
-     protected $username = '';
-
-
-     protected $pwd = '';
-
-     
-     protected $db = '';
-     
-     
      protected $salt = '';
-     
-     
-     protected $connectionType = '';
-
 
      protected $whoCalledMe = '';
 
+     protected $settings;
 
 
     /**
@@ -38,20 +21,16 @@ require_once('settings.php');
     public function __construct()
     {
         $classThatCalled = get_class($this);
+
         $this->whoCalledMe = $classThatCalled;
 
-        $settingsClass = new settings();
+        $settingsClass = new Settings();
 
         $this->settings = $settingsClass;
 
         //get DB connection credentials
         $credentials = $this->settings->getSettings()['DBcredentials'];
 
-        $this->username = $credentials['username'];
-        $this->pwd = $credentials['pwd'];
-        $this->db = $credentials['db'];
-        $this->host = $credentials['host'];
-        $this->connectionType = $credentials['connectionType'];
         $this->salt = $credentials['key'];
     }
 
@@ -63,31 +42,15 @@ require_once('settings.php');
 
     protected function connect()
     {
+        $credentials = $this->settings->getSettings()['DBcredentials'];
+        $conn = new mysqli($credentials['host'], $credentials['username'], $credentials['pwd'], $credentials['db']);
 
-        if ($this->connectionType  == 'mysqli')
+        if ($conn->connect_error)
         {
-            $conn = new mysqli($this->host, $this->username, $this->pwd, $this->db);
-
-            if ($conn->connect_error)
-            {
-                die('cannot open database');
-            }
-
-
-            return $conn;
+            die('cannot open database');
         }
-        elseif ($this->connectionType  == 'pdo')
-        {
-            try
-            {
-                return new PDO("mysql:host=$this->host;dbname=$this->db", $this->username, $this->pwd);
-            }
-            catch (PDOException $e)
-            {
-                echo 'Cannot connect to database';
-                exit;
-            }
-        }
+
+        return $conn;
     }
 
 
@@ -116,8 +79,6 @@ require_once('settings.php');
          $table = $model->getTable();
          $db = $this->connect();
 
-         //build the map of the table columns and datatypes. Note we have created before hand an private member called 'columns' wh will hold column names n datatypes
-         //only your model class will write to n read from this member
          $query = 'DESCRIBE '.strtolower($table);
 
          $result = $db->query($query);
@@ -232,19 +193,109 @@ require_once('settings.php');
 
 
 
+     public function escapeString4DB($string)
+     {
+         $db = $this->connect();
+         return $db->real_escape_string($string);
+     }
+
+
+
+
+
+     /**
+      * It it recommended to assign values to all fields on a model class after having initialized them with NULLs
+      * to avoid errors of number of parameters provided not matching the number of fields on the table.
+      * Obviously, make sure those NULL fields can actually accept a NULL in the DB
+      *
+      * @return bool|string
+      */
+     public function save()
+     {
+         $model = new $this->whoCalledMe;
+         $table = $model->getTable();
+
+         $data = array();
+         $datatypes = array();
+
+         foreach (get_object_vars($this) as $property => $value) {
+             //filter out any properties that are not in ur columns array
+             if (array_key_exists($property, $model->_columns)) {
+                 //set the field n value
+                 $data[$property] = $value;
+
+                 //set the field datatype
+                 array_push($datatypes, $model->_columns[$property]);
+             }
+
+         }
+
+         //Convert datatypes into a string
+         $datatypes = implode($datatypes);
+
+         // Connect to the database
+         $db = $this->connect();
+         $key = $this->getSalt();
+
+         list( $fields, $placeholders, $values ) = $this->insert_update_prep_query($data);
+
+         array_unshift($values, $datatypes);
+
+         $stmt = $db->stmt_init();
+
+         $stmt->prepare("INSERT INTO {$table} ({$fields}) VALUES ({$placeholders})");
+
+
+         //Bind values
+         call_user_func_array( array( $stmt, 'bind_param'), $this->ref_values($values));
+
+         $stmt->execute();
+
+         if ( $stmt->affected_rows == 1)
+         {
+             return $stmt->insert_id;
+         }
+         elseif ( (isset($stmt->errno)) && ($stmt->errno == 1062))
+         {
+             return 'duplicate';
+         }
+         else
+         {
+             return false;
+         }
+     }
 
 
 
 
 
 
+
+     /**
+      * Instead of preparing all the data needed to be passed to the update()
+      * method ($table, $data, $datatypes, $whereClause), updateObject just takes
+      * a 'where' clause array of 'fieldName' => 'value' pairs and does all the rest for you.
+      *
+      * @example:
+      *         $products->products_authorized = 'yes';
+      *         $products->products_authorized_date = date("Y-m-d H:i:s");
+      *         $products->products_authorized_by = $authorizerId;
+      *         $where = ['products_id' => $adId];
+      *
+      *         $updated = $products->updateObject($where);
+      *
+      *
+      * @param $where array of 'field name' => 'criteria value'
+      * @return bool|string
+      */
      public function updateObject($where)
      {
          $model = new $this->whoCalledMe;
+         $table = $model->getTable();
 
          //prepare the data to make up the query
          $data = array();
-         $datatypes = array();
+         $dataTypes = array();
 
 
          foreach (get_object_vars($this) as $property => $value) {
@@ -258,52 +309,69 @@ require_once('settings.php');
                      $data[$property] = $value;
                      $data['key'] = $key;
 
-                     //store the 2 pieces of datatypes needed for passwords (is)
-                     array_push($datatypes, $model->_columns[$property]);
+                     array_push($dataTypes, $model->_columns[$property]);
                      //we add an extra string character for the case of 'users_pass' coz of its associated salt encryption string
-                     array_push($datatypes, 's');
+                     array_push($dataTypes, 's');
                  }
                  else {
                      $data[$property] = $value;
 
-                     //set the field datatype
-                     array_push($datatypes, $model->_columns[$property]);
+                     //set field datatype
+                     array_push($dataTypes, $model->_columns[$property]);
                  }
              }
 
          }
 
-
-         //The 'Where' clause also needs to have its own matched datatypes separately from the data itself
-         // this is needed by the placeholders of the mysqli prepared statement
-         //-----------------------------------------------------------
+         //The 'Where' clause also needs to have its own matched datatypes separately from the data
+         // for the placeholders of the mysqli prepared statement
          foreach ($where as $field => $val)
          {
              if (array_key_exists($field, $model->_columns)) {
-                 //add to the field datatypes
-                 array_push($datatypes, $model->_columns[$field]);
+                 array_push($dataTypes, $model->_columns[$field]);
              }
          }
-         //------------------------------------------------------------
 
-         //Convert datatypes into a string
-         $datatypes = implode($datatypes);
+         //Convert datatypes to string
+         $datatypes = implode($dataTypes);
 
+         // Connect to the database
+         $db = $this->connect();
 
-         //get this model's tablename
-         $table = $this->getTable();
+         list( $fields, $placeholders, $values ) = $this->insert_update_prep_query($data, 'update');
 
-         //do the update
-         $updated = $this->update($table, $data, $datatypes, $where);
-         if ($updated == 1062) {
-             return 'duplicate';
+         //Format where clause
+         $where_clause = '';
+         $where_values = [];
+         $count = 0;
+
+         foreach ( $where as $field => $value )
+         {
+             if ( $count > 0 ) {
+                 $where_clause .= ' AND ';
+             }
+
+             $where_clause .= $field . '=?';
+             $where_values[] = $value;
+
+             $count++;
          }
-         elseif ($updated) {
+
+         // Prepend $format onto $values
+         array_unshift($values, $datatypes);
+         $values = array_merge($values, $where_values);
+
+         $stmt = $db->prepare("UPDATE {$table} SET {$placeholders} WHERE {$where_clause}");
+
+         call_user_func_array( array( $stmt, 'bind_param'), $this->ref_values($values));
+
+         $stmt->execute();
+
+         if ( $stmt->affected_rows ) {
              return true;
          }
-         else {
-             return false;
-         }
+
+         return false;
 
      }
 
@@ -405,53 +473,72 @@ require_once('settings.php');
 
 
      /**
-     * @param $table
-     * @param $data
-     * @param $dataTypes
-     * @return bool|int|string
-     */
-     public function insert($table, $data, $dataTypes)
+      * Call this function like so:
+      *
+      *      $blog2cat = new Article2cat();
+      *
+      *      $blogPost = [
+      *          'blog_id' => $_POST['blog_id'],
+      *          'blog_cats_id' => $cat_id,
+      *      ];
+      *
+      *      $blog2cat->insert($blogPost);
+      *
+      * @param $data
+      * @return bool|int|string
+      */
+     public function insert($data)
      {
-         // Check for $table or $data not set
-         if ( empty( $table ) || empty( $data ) ) {
-             return false;
-         }
+         $model = new $this->whoCalledMe;
+         $table = $model->getTable();
 
-         // Connect to the database
          $db = $this->connect();
+         $key = $this->getSalt();
 
-         // Cast $data to an array
          $data = (array) $data;
 
+         $dataTypes = '';
+         $usersDataClues = $model->getColumnDataTypes();
+
+         foreach ($data as $dataKey => $dat) {
+             foreach ($usersDataClues as $dataClueKey => $columnDatClue) {
+                 if ($dataClueKey == $dataKey) {
+                     $dataTypes .= $columnDatClue;
+                     if ($dataKey == 'users_pass')
+                     {
+                         //additional parameters for the password field
+                         $data['key'] = $key;
+                     }
+                 }
+             }
+         }
 
          list( $fields, $placeholders, $values ) = $this->insert_update_prep_query($data);
 
-         // Prepend the $dataTypes string onto the $values array (The bind_param() meth needs it like this-1st param is string of datatype xters to rep the fields,
-         // followed by as many params (vars) as there are values to rep the placeholders (? xters))
          array_unshift($values, $dataTypes);
 
 
          $stmt = $db->stmt_init();
 
-         // Prepare our query for binding
          $stmt->prepare("INSERT INTO {$table} ({$fields}) VALUES ({$placeholders})");
 
 
-         // Dynamically bind values
+         // Bind values
          call_user_func_array( array( $stmt, 'bind_param'), $this->ref_values($values));
 
-         // Execute the query
          $stmt->execute();
 
-         // Check for successful insertion
          if ( $stmt->affected_rows == 1)
          {
-             //return true;
              return $stmt->insert_id;
          }
          elseif ( (isset($stmt->errno)) && ($stmt->errno == 1062))
          {
              return '1062';
+         }
+         else
+         {
+             return false;
          }
      }
 
@@ -462,6 +549,16 @@ require_once('settings.php');
 
 
      /**
+      * Update a record in the DB
+      *
+      * Prepare to call it like so:
+      * @example
+      *     $data = ['blog_title' => $_POST['title'],
+      *     'blog_article' => $_POST['article'],
+      *     ];
+      *
+      * $where = ['blog_id' => $blog_id];
+     $updated = $blog->update($data, $where);
       *
       * @param string $table the table to update in
       * @param array $data a ready-made array of 'fieldName' => 'value' elements
@@ -472,20 +569,49 @@ require_once('settings.php');
       *
       * @return bool
       */
-     public function update($table, $data, $dataTypes, $where)
+     public function update($data, $where)
      {
-         // Check for $table or $data not set
-         if (empty( $table ) || empty($data)) {
-             return false;
+         $model = new $this->whoCalledMe;
+         $table = $model->getTable();
+
+         // Cast $data to an array
+         $data = (array) $data;
+         $newData = [];
+
+         $dataTypes = '';
+         $tableDataClues = $model->getColumnDataTypes();
+
+         foreach ($data as $dataKey => $dat) {
+             foreach ($tableDataClues as $dataClueKey => $columnDatClue) {
+                 if ($dataClueKey == $dataKey) {
+                     $dataTypes .= $columnDatClue;
+
+                     //move the data into the new array because we need to maintain the order as passed in by the developer
+                     $newData[$dataKey] = $dat;
+                     if ($dataClueKey == 'users_pass')
+                     {
+                         $key = $this->getSalt();
+                         //additional parameters for the password field
+                         $newData['key'] = $key;
+                         $dataTypes .= 's';
+                     }
+                 }
+             }
          }
 
-         // Connect to the database
+         //prepare the datatype string for the where clause too
+         foreach ($where as $criteriaKey => $criteria)
+         {
+             foreach ($tableDataClues as $dataClueKey => $columnDatClue) {
+                 if ($dataClueKey == $criteriaKey) {
+                     $dataTypes .= $columnDatClue;
+                 }
+             }
+         }
+
          $db = $this->connect();
 
-         // Cast $data and $format to arrays
-         $data = (array) $data;
-
-         list( $fields, $placeholders, $values ) = $this->insert_update_prep_query($data, 'update');
+         list( $fields, $placeholders, $values ) = $this->insert_update_prep_query($newData, 'update');
 
          //Format where clause
          $where_clause = '';
@@ -500,10 +626,11 @@ require_once('settings.php');
 
              $where_clause .= $field . '=?';
              $where_values[] = $value;
+
              $count++;
          }
 
-         // Prepend $format onto $values
+
          array_unshift($values, $dataTypes);
          $values = array_merge($values, $where_values);
 
@@ -511,10 +638,8 @@ require_once('settings.php');
 
          call_user_func_array( array( $stmt, 'bind_param'), $this->ref_values($values));
 
-         // Execute the query
          $stmt->execute();
 
-         // Check for successful insertion
          if ( $stmt->affected_rows ) {
              return true;
          }
@@ -538,7 +663,6 @@ require_once('settings.php');
 
      public function delete($table, $where = array(), $dataTypes = '')
      {
-         // Connect to the database
          $db = $this->connect();
 
 
@@ -556,8 +680,6 @@ require_once('settings.php');
              }
          }
          elseif (!empty($where)) {
-
-             // Cast all data to arrays
              $where = (array) $where;
              $dataTypes = (string) $dataTypes;
 
@@ -577,7 +699,6 @@ require_once('settings.php');
                  $count++;
              }
 
-
              // Prepend $format onto $values
              array_unshift($where_values, $dataTypes);
 
@@ -585,15 +706,12 @@ require_once('settings.php');
 
              call_user_func_array(array($stmt, 'bind_param'), $this->ref_values($where_values));
 
-             // Execute the query
              $stmt->execute();
 
-             // Check for successful deletion
              if ($stmt->affected_rows) {
                  return true;
              }
-             //if there was no record in the DB no msg will be returned,
-             // so we put another return line here below
+
              return true;
          }
 
@@ -625,7 +743,7 @@ require_once('settings.php');
             //added this to stop 'key' from being inserted as a table field, which is wrong
             if ($field == 'key')
             {
-                //coz salt (the key) still needs to be bound to the values
+                //salt (the key) still needs to be bound to the values
                 $values[] = $value;
                 continue;
             }
@@ -673,8 +791,6 @@ require_once('settings.php');
 
 
 
-
-        
 
     /**
      * Creates an optimized array to be used by bind_param() to bin

@@ -1,14 +1,12 @@
 <?php
 
-//every page needing to restrict access only to logged in users must include this file
 require_once('./includes/authenticate.inc.php');
-
 require_once('./includes/Users.php');
 require_once('./includes/DateConversion.php');
 
+
 $userClass = new Users();
 $users = $userClass->getAllUsers();
-//var_dump($users); die();
 
 $dateClass = new DateConversion();
 ?>
@@ -50,10 +48,6 @@ $dateClass = new DateConversion();
 		<div class="col-sm-12">
 			<article class="account-content">
 
-				<?php
-				//echo '<pre>';
-                //die(print_r($_SESSION));  ?>
-
 				<h3>Welcome <span><?= $_SESSION['username'] ?></span></h3>
 				<?php if ((isset($_GET['uc'])) && ($_GET['uc'] == 1))
 				{
@@ -70,6 +64,14 @@ $dateClass = new DateConversion();
 				{
 					echo "<p class='tableHead' style='color: red; background-color: yellow;font-weight:bold;border-radius:4px;margin-left:30%;'>Only admin users are allowed to edit users</p>";
 
+				}
+				if ((isset($_GET['uo'])) && ($_GET['uo'] == '1')) //user was updated
+				{
+					echo "<p style='color: green; background-color: white;margin-left:30%;'>The user was successfully updated</p>";
+				}
+				if ((isset($_GET['adminselfdel'])) && ($_GET['adminselfdel'] == '0')) //admin cannot self delete
+				{
+					echo "<p style='color: red; background-color: white;margin-left:30%;'>You are admin & cannot delete yourself from this screen!</p>";
 				} ?>
 
 				
@@ -96,8 +98,8 @@ $dateClass = new DateConversion();
 								<td><?=$user['users_type']?></td>
 								<td><?=$user['pass']?></td>
 								<td><?=$dateClass->YYYYMMDDtoDDMMYYYY($user['users_created'])?></td>
-								<td><a href="/userManager/createUser.php?ed=1&uid=<?=$user['users_id']?>" class="btn btn-warning btn-sm">Edit</a></td>
-								<td><a onClick="return confirm('Are you sure you wish to delete this user? This action cannot be undone')" href="./includes/adminController.php?delu=<?=$user['users_id']?>" class="btn btn-danger btn-sm">Delete</a></td>
+								<td><a href="/userManager/createUser.php?ed=1&uid=<?=$user['users_id']?>"><button  class="btn btn-warning btn-sm">Edit</button></a></td>
+								<td><button <?=$user['users_id'] == $_SESSION['custo_id']? "disabled title='You ADMIN and cannot delete yourself from here'" : '' ?> onClick="return confirm('Are you sure you wish to delete this user? This action cannot be undone')" href="./includes/adminController.php?delu=<?=$user['users_id']?>" class="btn btn-danger btn-sm">Delete</button></td>
 							</tr>
 						<?php }
 							} ?>

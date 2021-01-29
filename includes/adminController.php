@@ -31,11 +31,19 @@ if (isset($_GET['delu']))
         header('Location: /userManager/dashboard.php?notAdmin=1');
         exit();
     }
-
-    $user = new Users();
-    $userId = $_GET['delu'];
-    $whereClause = ['users_id' => $userId];
-    $user->deleteWhere($whereClause);
+    else if(($_SESSION['user_type'] == 'admin') && ($_SESSION['custo_id'] == $_GET['delu']))
+    {
+        //admin users cannot delete themselves
+        header('Location: /userManager/dashboard.php?adminselfdel=0');
+        exit();
+    }
+    else
+    {
+        $user = new Users();
+        $userId = $_GET['delu'];
+        $whereClause = ['users_id' => $userId];
+        $user->deleteWhere($whereClause);
+    }
 }
 
 
@@ -88,10 +96,7 @@ class adminController  {
 
         if ($fail == "")
         {
-            //connect to DB
-            //authenticate the user as the admin, create the session id, and redirect appropriately
             $authenticated = $this->authenticate($username, $password, $rem_me);
-
         }
 
     }
@@ -104,27 +109,22 @@ class adminController  {
 
     public function authenticate($username, $password, $rem_me = false)
     {
-        //this the file where data from the db is retrieved n compared with that from the log in form.
-        //n a session is created on success, and the user redirected to where they need to go.
         $login_errors = array();
 
         if ($authenticated = $this->user->authenticateUser($username, $password))
         {
-            //A match was found
             //set a cookie if the user chose to be remembered
             if ($rem_me)
             {
                 setcookie('rem_me', $username, time() + 172800); //48 hours
             }
 
-            //log in was successful
             header('Location: /userManager/dashboard.php?lg=1');
             exit();
 
         }
         else
         {
-            // if no match, prepare error message
             header('Location: /userManager/login.php?lg=0');
         }
 

@@ -5,25 +5,6 @@ require_once('DB_Adapter.php');
 require_once('settings.php');
 require_once('Validator.php');
 
-/** ############## Properties and Methods all model classes must have to get the full power of the Dorguzen ###############
- * Must extend the parent model DGZ_DB_ADAPTER
-
-##### PROPERTIES ######################
- * protected $_columns = array();
- * private $_hasParent = array();
- * private $_hasChild = array();
-
-##### CONSTRUCTOR ######################
- * Must call the parent constructor
- * Must call loadORM(), which queries its table, then loops through the results and populates its _columns member array
-
-##### METHODS ######################
- * It has access to all its patent's methods, and you can add yours
- *
- */
-
-
-
     /**
      * Class Users
      */
@@ -47,10 +28,6 @@ require_once('Validator.php');
 
 
 
-
-
-        //---------------------SET/RETRIEVE VALIDATOR---------------
-
         public function setValidator($validator)
         {
             $this->_validator = $validator;
@@ -60,12 +37,6 @@ require_once('Validator.php');
         {
             return $this->_validator;
         }
-
-
-        //----------------------
-
-
-
 
 
 
@@ -98,7 +69,7 @@ require_once('Validator.php');
             $stmt = $connect->stmt_init();
             $stmt->prepare($sql);
 
-            // bind parameters and insert the details into the database
+            // bind parameters and save details to DB
             $stmt->bind_param($dataTypes, $username, $password, $salt);
             $stmt->bind_result($custo_id, $type, $username, $pass, $updated, $created); 
             $stmt->execute();
@@ -110,15 +81,12 @@ require_once('Validator.php');
             {
                 session_start();
 
-                if (!session_id()) { session_start(); } // You should start the session only just bf u start assigning the session variables.
-                $_SESSION['authenticated'] = 'Let Go'; //this is the secret keyword (token) u'll check to confirm that a user is logged in.
-                // get the time the session started
+                if (!session_id()) { session_start(); }
+                $_SESSION['authenticated'] = 'Let Go';
+
                 $_SESSION['start'] = time();
                 session_regenerate_id();
 
-
-                // This is when you grant them access and let them go by redirecting them to the right quarters of the site
-                //store the session variables to be used further on your site if the session variable has been set, then redirect
                 if (isset($_SESSION['authenticated']))
                 {
 
@@ -128,7 +96,6 @@ require_once('Validator.php');
                     $_SESSION['pass'] = $pass;
                     $_SESSION['created'] = $created;
 
-                    //Now user is logged in, redirect them to their appropriate pages
                     session_write_close();
                 }
 
@@ -149,11 +116,7 @@ require_once('Validator.php');
 
         public function getAllUsers()
         {
-            $settings = $this->settings;
-            $connect = $this->connect();
-
             $key = $this->settings->getSettings()['DBcredentials']['key'];
-
 
             $sql = "SELECT users_id, users_type, users_username, AES_DECRYPT(users_pass, '$key') AS pass, users_created FROM users";
             $users = $this->query($sql);
@@ -206,7 +169,6 @@ require_once('Validator.php');
                 $password= $this->_validator->fix_string($_POST['password']);
             }
 
-            //validate the submitted values
             $fail = $this->_validator->validate_username($username);
 
             $fail .= $this->_validator->validate_password($password);
@@ -218,45 +180,15 @@ require_once('Validator.php');
 
             if ($fail == "")
             {
-                //Get ready to save the new user
-                $key = $this->settings->getSettings()['DBcredentials']['key'];
-
-                $table = $this->getTable();
 
                 $data = [
                     'users_type' => $usertype,
                     'users_username' => $username,
                     'users_pass' => $password,
-                    'key' => $key,
                     'users_created' => ''
                 ];
 
-                $datatypes = '';
-                $usersDataClues = $this->getColumnDataTypes();
-
-                //prepare the datatypes for the query (a string is needed)
-                foreach ($usersDataClues as $dataClueKey => $columnDatClue)
-                {
-                    if ($dataClueKey == 'users_type') {
-                        $datatypes .= $columnDatClue;
-                    }
-
-                    if ($dataClueKey == 'users_username') {
-                        $datatypes .= $columnDatClue;
-                    }
-
-                    if ($dataClueKey == 'users_pass') {
-                        $datatypes .= $columnDatClue;
-                    }
-
-
-                    if ($dataClueKey == 'users_created') {
-                        $datatypes .= $columnDatClue;
-                    }
-
-                }
-
-                $saved = $this->insert($table, $data, $datatypes);
+                $saved = $this->insert($data);
 
                 if ($saved)
                 {
@@ -315,51 +247,20 @@ require_once('Validator.php');
 
             if ($fail == "")
             {
-                $key = $this->getSalt();
-
-                $table = $this->getTable();
 
                 $data = [
-                            'users_type' => $usertype,
-                            'users_username' => $username,
-                            'users_pass' => $password,
-                            'key' => $key,];
-
-                $dataTypes = '';
-                $usersDataTypes = $this->getColumnDataTypes();
-
-                //prepare the datatypes for the query (a string is needed)-We only need those of the columns that are affected by our
-                // query (as in the $data array above)-notice we leave $key out of it as it's not a column in our 'users' table
-                //we also add an extra string character for the case of 'users_pass' because of its associated salt encryption string
-                foreach ($usersDataTypes as $dataClueKey => $columnClue) {
-                    if ($dataClueKey == 'users_pass') {
-                        $dataTypes .= $columnClue;
-                        $dataTypes .= 's';
-                    }
-                    else
-                    {
-                        if ($dataClueKey == 'users_type')
-                        {
-                            $dataTypes .= $columnClue;
-                        }
-                        if ($dataClueKey == 'users_username')
-                        {
-                            $dataTypes .= $columnClue;
-                        }
-                    }
-                }
+                    'users_type' => $usertype,
+                    'users_username' => $username,
+                    'users_pass' => $password,
+                    ];
 
                 $where = ['users_id' => $userId];
 
-                //Because we are dealing with an update query, we have to add an extra dataType for every where clause used,
-                // this is needed by the placeholders of the mysqli prepared statement
-                $dataTypes .= 'i'; //i here obviously represents an integer for the user ID
-
-                $updated = $this->update($table, $data, $dataTypes, $where);
+                $updated = $this->update($data, $where);
 
                 if ($updated)
                 {
-                    header('Location: /userManager/createUser.php?uo=1');
+                    header('Location: /userManager/dashboard.php?uo=1');
                     exit();
                 }
             }

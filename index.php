@@ -1,5 +1,5 @@
 <?php
-//every page needing to restrict access only to logged in users must include this file
+
 require_once('./includes/authenticate.inc.php');
 
 ?>
