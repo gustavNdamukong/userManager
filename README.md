@@ -18,6 +18,11 @@
         admin - username: admin123 password: 1234567
 
         admin - username: fritz password: 1234567
+        
+        
+# Here is what the UI looks like
+
+![userManager - simple & secure user credentials lookup app in PHP/MySQL](https://github.com/gustavNdamukong/userManager/blob/master/userManager.png?raw=true)
 
 
 # DATABASE SETUP
