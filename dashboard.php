@@ -99,7 +99,7 @@ $dateClass = new DateConversion();
 								<td><?=$user['pass']?></td>
 								<td><?=$dateClass->YYYYMMDDtoDDMMYYYY($user['users_created'])?></td>
 								<td><a href="/userManager/createUser.php?ed=1&uid=<?=$user['users_id']?>"><button  class="btn btn-warning btn-sm">Edit</button></a></td>
-								<td><button <?=$user['users_id'] == $_SESSION['custo_id']? "disabled title='You ADMIN and cannot delete yourself from here'" : '' ?> onClick="return confirm('Are you sure you wish to delete this user? This action cannot be undone')" href="./includes/adminController.php?delu=<?=$user['users_id']?>" class="btn btn-danger btn-sm">Delete</button></td>
+								<td><a <?=$user['users_id'] == $_SESSION['custo_id']? "disabled title='You cannot delete yourself'" : '' ?> onClick="return confirm('Are you sure you wish to delete this user? This action cannot be undone')" href="./includes/adminController.php?delu=<?=$user['users_id']?>" class="btn btn-danger btn-sm">Delete</a></td>
 							</tr>
 						<?php }
 							} ?>

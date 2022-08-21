@@ -40,80 +40,6 @@ require_once('Validator.php');
 
 
 
-        
-        public function authenticateUser($username, $password)
-        {
-            $connect = $this->connect();
-
-            $salt = $this->getSalt();
-
-            $dataTypes = '';
-            $getdataTypes = $this->getColumnDataTypes();
-            foreach ($getdataTypes as $dataTypeKey => $getDataType)
-            {
-                if ($dataTypeKey == 'users_username')
-                {
-                    $dataTypes .= $getDataType;
-                }
-                if ($dataTypeKey == 'users_pass')
-                {
-                    $dataTypes .= $getDataType;
-                }
-            }
-
-            //add one for the password 'key' value which must be represented but does not exist as a column in the users table
-            $dataTypes .= 's';
-
-            $sql = "SELECT * FROM ".$this->getTable()." WHERE users_username = ? AND users_pass = AES_ENCRYPT(?, ?)";
-
-            $stmt = $connect->stmt_init();
-            $stmt->prepare($sql);
-
-            // bind parameters and save details to DB
-            $stmt->bind_param($dataTypes, $username, $password, $salt);
-            $stmt->bind_result($custo_id, $type, $username, $pass, $updated, $created); 
-            $stmt->execute();
-            $stmt->store_result();
-
-            $stmt->fetch();
-
-            if ($stmt->num_rows ) 
-            {
-                session_start();
-
-                if (!session_id()) { session_start(); }
-                $_SESSION['authenticated'] = 'Let Go';
-
-                $_SESSION['start'] = time();
-                session_regenerate_id();
-
-                if (isset($_SESSION['authenticated']))
-                {
-
-                    $_SESSION['custo_id'] = $custo_id;
-                    $_SESSION['user_type'] = $type;
-                    $_SESSION['username'] = $username;
-                    $_SESSION['pass'] = $pass;
-                    $_SESSION['created'] = $created;
-
-                    session_write_close();
-                }
-
-               return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-
-
-
-
-
-
-
         public function getAllUsers()
         {
             $key = $this->settings->getSettings()['DBcredentials']['key'];
@@ -127,7 +53,6 @@ require_once('Validator.php');
             }
 
         }
-
 
 
 
@@ -145,9 +70,7 @@ require_once('Validator.php');
             {
                 return $users;
             }
-
         }
-
 
 
 
@@ -185,7 +108,7 @@ require_once('Validator.php');
                     'users_type' => $usertype,
                     'users_username' => $username,
                     'users_pass' => $password,
-                    'users_created' => ''
+                    'users_created' => $this->timeNow()
                 ];
 
                 $saved = $this->insert($data);
@@ -211,8 +134,6 @@ require_once('Validator.php');
 
 
 
-
-
         public function editUser ($userData)
         {
             //sanitize the submitted values
@@ -221,7 +142,7 @@ require_once('Validator.php');
                 $userId = $this->_validator->fix_string($userData['userId']);
             }
 
-            if (isset($userData['user_type']))
+            if ((isset($userData['user_type'])) && ($userData['user_type'] != ""))
             {
                 $usertype = $this->_validator->fix_string($userData['user_type']);
             }
@@ -235,24 +156,26 @@ require_once('Validator.php');
                 $password= $this->_validator->fix_string($userData['password']);
             }
 
-
             //final cleansing
             $fail = $this->_validator->validate_username($username);
             $fail .= $this->_validator->validate_password($password);
 
-            if ($usertype == '')
-            {
-                $fail .= 'no usertype given';
-            }
-
             if ($fail == "")
             {
-
-                $data = [
-                    'users_type' => $usertype,
-                    'users_username' => $username,
-                    'users_pass' => $password,
+                if ($usertype == '')
+                {
+                    $data = [
+                        'users_username' => $username,
+                        'users_pass' => $password,
                     ];
+                }
+                else {
+                    $data =
+                        ['users_type' => $usertype,
+                            'users_username' => $username,
+                            'users_pass' => $password,
+                        ];
+                }
 
                 $where = ['users_id' => $userId];
 
@@ -271,11 +194,6 @@ require_once('Validator.php');
             }
 
         }
-
-
-
-
-        
     }
     
 

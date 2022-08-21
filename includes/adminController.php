@@ -96,40 +96,58 @@ class adminController  {
 
         if ($fail == "")
         {
-            $authenticated = $this->authenticate($username, $password, $rem_me);
-        }
+            $authenticated = $this->authenticate($username, $password);
 
-    }
-
-
-
-
-
-
-
-    public function authenticate($username, $password, $rem_me = false)
-    {
-        $login_errors = array();
-
-        if ($authenticated = $this->user->authenticateUser($username, $password))
-        {
-            //set a cookie if the user chose to be remembered
-            if ($rem_me)
+            if ($authenticated)
             {
-                setcookie('rem_me', $username, time() + 172800); //48 hours
+                session_start();
+
+                if (!session_id()) { session_start(); }
+                $_SESSION['authenticated'] = 'Let Go';
+
+                $_SESSION['start'] = time();
+                session_regenerate_id();
+
+                //extract the returned vars
+                $_SESSION['custo_id'] = $authenticated['users_id'];
+                $_SESSION['user_type'] = $authenticated['users_type'];
+                $_SESSION['username'] = $authenticated['users_username'];
+                $_SESSION['pass'] = $authenticated['users_pass'];
+                $_SESSION['created'] = $authenticated['users_created'];
+
+                session_write_close();
+
+                //We only set a cookie if the user chose to be remembered
+                if ($rem_me)
+                {
+                    setcookie('rem_me', $username, time() + 172800); //48 hours
+                }
+
+                header('Location: /userManager/dashboard.php?lg=1');
+                exit();
             }
-
-            header('Location: /userManager/dashboard.php?lg=1');
-            exit();
-
+            else
+            {
+                header('Location: /userManager/login.php?lg=0');
+                exit();
+            }
         }
-        else
-        {
-            header('Location: /userManager/login.php?lg=0');
-        }
-
     }
 
+
+
+    /**
+     * @param $username the username to authenticate the user with
+     * @param $password the password to authenticate the user with
+     * @return array|bool It returns false if the login fails, or an array of all fields in your users table
+     */
+    public function authenticate($username, $password)
+    {
+        $user_model = new Users();
+
+        $loginData = ['users_username' => $username, 'users_pass' => $password];
+        return $user_model->authenticateUser($loginData);
+    }
 
 
 
@@ -137,32 +155,22 @@ class adminController  {
     {
         $_SESSION = array();
 
-        // invalidate the session cookie
         if (isset($_COOKIE[session_name()]))
         {
             setcookie(session_name(), '', time() - 86400, '/');
         }
 
-        //Delete 'remember' cookie if any.
+        //delete cookie
         if (isset($_COOKIE['rem_me']))
         {
             setcookie('rem_me', '', time()-86400);
         }
 
-        //end session and redirect
+        //end session and redirect user
         session_destroy();
 
-        //throw them back to the home page
         header('Location: /userManager/index.php?');
         exit();
-
     }
-
-
-
-
-
-
-
 
 }

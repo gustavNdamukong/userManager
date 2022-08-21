@@ -106,7 +106,7 @@ if (isset($_POST['editUser'])) {
 						<div class="form col-lg-8">
 							<form action="" method="post">
 								<label for="user_type">User Type</label>
-								<select id="user_type" name="user_type" class="form-control">
+								<select id="user_type" name="user_type" class="form-control" <?=((isset($userForEdit)) && $userForEdit[0]['users_id'] == $_SESSION['custo_id'])?"disabled='true' title='You ADMIN cannot change your own user type'":''?>>
 									<option value="">Choose user type</option>
 									<option <?=((isset($userForEdit)) && $userForEdit[0]['users_type'] == 'member')?"selected='true'":''?> value="member">Member</option>
 									<option <?=((isset($userForEdit)) && $userForEdit[0]['users_type'] == 'admin')?"selected='true'":''?> value="admin">Admin</option>
@@ -119,6 +119,7 @@ if (isset($_POST['editUser'])) {
 								<input placeholder="Password" id="password" name="password" class="form-control" type="password" <?php if (isset($userForEdit)) { ?> value="<?=$userForEdit[0]['pass']?>" <?php } ?> />
 								<input id="userId" name="userId" type="hidden" <?php if (isset($userForEdit)) { ?> value="<?=$userForEdit[0]['users_id']?>" <?php } ?> />
 								<input type="hidden" id="createUser" <?php if (isset($_GET['ed'])) { ?> name="editUser" <?php } else { ?> name="createUser" <?php } ?>>
+								<br>
 								<a href="/userManager/dashboard.php" class="btn btn-warning btn-lg">Cancel</a>
 								<button type="submit" class="btn btn-primary btn-lg"><?=isset($_GET['ed'])?'Edit User':'Create User'?></button>
 							</form>
