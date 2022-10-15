@@ -3,7 +3,7 @@ ob_start();
 require_once('Validator.php');
 require_once('Users.php');
 
-//every page needing to restrict access only to logged in users must include this file
+//every page restricted to logged-in users must include this file
 require_once('authenticate.inc.php');
 
 $validator = new Validator();
@@ -20,12 +20,10 @@ if ((isset($_GET['lg'])) && ($_GET['lg'] == 'x'))
     $admin->logout();
 }
 
-
-
-//process deletion of a user
+//handle user deletion deletion
 if (isset($_GET['delu']))
 {
-    //only admin users are allowed to be on this page to edit stuff, so make sure they have admin rights
+    //only admin users allowed here
     if ($_SESSION['user_type'] != 'admin')
     {
         header('Location: /userManager/dashboard.php?notAdmin=1');
@@ -46,7 +44,6 @@ if (isset($_GET['delu']))
     }
 }
 
-
 class adminController  {
 
     protected $validator = null;
@@ -58,9 +55,6 @@ class adminController  {
         $this->validator = $validator;
         $this->user = $users;
     }
-
-
-
 
                                 
     public function login()
@@ -135,7 +129,6 @@ class adminController  {
     }
 
 
-
     /**
      * @param $username the username to authenticate the user with
      * @param $password the password to authenticate the user with
@@ -150,7 +143,6 @@ class adminController  {
     }
 
 
-
     public function logout()
     {
         $_SESSION = array();
@@ -160,13 +152,11 @@ class adminController  {
             setcookie(session_name(), '', time() - 86400, '/');
         }
 
-        //delete cookie
         if (isset($_COOKIE['rem_me']))
         {
             setcookie('rem_me', '', time()-86400);
         }
 
-        //end session and redirect user
         session_destroy();
 
         header('Location: /userManager/index.php?');

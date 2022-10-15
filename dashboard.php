@@ -4,7 +4,6 @@ require_once('./includes/authenticate.inc.php');
 require_once('./includes/Users.php');
 require_once('./includes/DateConversion.php');
 
-
 $userClass = new Users();
 $users = $userClass->getAllUsers();
 
@@ -20,10 +19,8 @@ $dateClass = new DateConversion();
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width">
 	<title>User manager</title>
-
 	<link rel="stylesheet" href="css/style.css" type="text/css">
 	<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
-
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script src="js/selectivizr-min.js"></script>
 	<script src="js/modernizr-2.6.2-respond-1.1.0.min.js"></script>
@@ -32,9 +29,7 @@ $dateClass = new DateConversion();
 	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js">
 	</script>
 	<![endif]-->
-
 </head>
-
 <body>
 <div id="mainwrapper" class="container">
 
@@ -74,7 +69,6 @@ $dateClass = new DateConversion();
 					echo "<p style='color: red; background-color: white;margin-left:30%;'>You are admin & cannot delete yourself from this screen!</p>";
 				} ?>
 
-				
 				<p>Add, update and delete users and their passwords.</p>
 				<div class="icon-nav row">
 
@@ -110,18 +104,11 @@ $dateClass = new DateConversion();
 		</div>
 
 	</div>
-
-
 	<article id="footer">
 		<?php include_once("includes/footer.inc.php"); ?>
 		<div class="clearer"></div>
 	</article>
-
-
 </div>
-
-
 <script src="js/bootstrap.min.js"></script>
-
 </body>
 </html>
