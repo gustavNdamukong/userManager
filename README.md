@@ -11,6 +11,11 @@
 
     -The database queries use mysqli's prepared statements which is secure against SQL injection.
 
+    -Visitors can register themselves
+
+    -Upon registration, users are sent an email link to veryfy their email. Only upon successful email verification will 
+        the new user be able to login.
+
     -Currently, there are two users already registered in the system, and they are both admins. Log in as either of the users and change the
         type of the other user to 'member' then log out and log back in as them to see the limitation in their privileges.
         Here are their log in details (passwords are encrypted).
@@ -18,6 +23,10 @@
         admin - username: admin123 password: 1234567
 
         admin - username: fritz password: 1234567
+
+    -The mail verification sent to users after signing up would look something like this 
+        (will differ depending on your application directory structure):
+        http://localhost/userManager/classes/adminController.php?verifyEmail=1&em=05889cc1928ac7a8acaa9f3f6bd4f2a5
         
         
 # Here is what the UI looks like

@@ -2,118 +2,60 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="564ac0b6-082c-4df8-acb6-91f8a070cdf2" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/createUser.php" afterPath="$PROJECT_DIR$/createUser.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dashboard.php" afterPath="$PROJECT_DIR$/dashboard.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/includes/DB_Adapter.php" afterPath="$PROJECT_DIR$/includes/DB_Adapter.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/includes/Users.php" afterPath="$PROJECT_DIR$/includes/Users.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/includes/adminController.php" afterPath="$PROJECT_DIR$/includes/adminController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/includes/authenticate.inc.php" afterPath="$PROJECT_DIR$/includes/authenticate.inc.php" />
+      <change afterPath="$PROJECT_DIR$/Autoloader.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Register.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/classes/CheckPassword.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/classes/DateConversion.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/classes/Messenger.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/classes/Model.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/classes/Users.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/classes/Validator.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/classes/adminController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config/Config.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/user_manager.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/createUser.php" beforeDir="false" afterPath="$PROJECT_DIR$/createUser.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/css/bootstrap.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/assets/css/bootstrap.min.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/assets/css/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dashboard.php" beforeDir="false" afterPath="$PROJECT_DIR$/dashboard.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/drawerbg.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/drawerbg.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/facebook_icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/facebook_icon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/footerbg.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/footerbg.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/pattern.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/pattern.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/rss.gif" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/rss.gif" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/twitter_icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/twitter_icon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/youtube_icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/youtube_icon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/DB_Adapter.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/DateConversion.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/Users.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/Validator.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/adminController.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/footer.inc.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/footer.inc.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/header.inc.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/header.inc.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/settings.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/bootstrap.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/js/bootstrap.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/jquery-ui.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/js/jquery-ui.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/modernizr-2.6.2-respond-1.1.0.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/js/modernizr-2.6.2-respond-1.1.0.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/selectivizr-min.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/js/selectivizr-min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/login.php" beforeDir="false" afterPath="$PROJECT_DIR$/login.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/userManager.sql" beforeDir="false" />
     </list>
-    <ignored path="allinone.iws" />
-    <ignored path=".idea/workspace.xml" />
-    <ignored path=".idea/dataSources.local.xml" />
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
-    <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
+  <component name="ComposerSettings">
+    <execution />
+  </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
-  <component name="FavoritesManager">
-    <favorites_list name="allinone" />
-  </component>
   <component name="FileColors">
     <fileColor scope="All" color="Violet" />
-  </component>
-  <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="header.inc.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/includes/header.inc.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="3" column="50" selection-start-line="3" selection-start-column="50" selection-end-line="3" selection-end-column="50" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="footer.inc.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/includes/footer.inc.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="1" column="36" selection-start-line="1" selection-start-column="36" selection-end-line="1" selection-end-column="36" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="authenticate.inc.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/includes/authenticate.inc.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Validator.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/includes/Validator.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="45" column="33" selection-start-line="45" selection-start-column="29" selection-end-line="45" selection-end-column="33" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/README.md">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DB_Adapter.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/includes/DB_Adapter.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="962">
-              <caret line="780" column="54" selection-start-line="780" selection-start-column="54" selection-end-line="780" selection-end-column="54" />
-              <folding>
-                <marker date="1661051320000" expanded="true" signature="5817:5874" placeholder="INSERT INTO $... " />
-                <marker date="1661051320000" expanded="true" signature="8412:8454" placeholder="UPDATE ${{$t... " />
-                <marker date="1661051320000" expanded="true" signature="12491:12548" placeholder="INSERT INTO $... " />
-                <marker date="1661051320000" expanded="true" signature="13026:13141" placeholder="/** * Update... " />
-                <marker date="1661051320000" expanded="true" signature="15240:15282" placeholder="UPDATE ${{$t... " />
-                <marker date="1661051320000" expanded="true" signature="15960:15972" placeholder="DELETE FROM " />
-                <marker date="1661051320000" expanded="true" signature="16829:16856" placeholder="DELETE FROM " />
-                <marker date="1661051320000" expanded="true" signature="21297:21430" placeholder="SELECT * FRO... ${$this-&gt;getTable()}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="adminController.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/includes/adminController.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2261">
-              <caret line="133" column="9" selection-start-line="133" selection-start-column="9" selection-end-line="133" selection-end-column="9" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -180,26 +122,19 @@
   <component name="JsGulpfileManager">
     <detection-done>true</detection-done>
   </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
   <component name="PhpServers">
     <servers />
   </component>
-  <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
   <component name="ProjectFrameBounds">
     <option name="x" value="-1605" />
     <option name="y" value="102" />
     <option name="width" value="1579" />
     <option name="height" value="845" />
   </component>
-  <component name="ProjectLevelVcsManager" settingsEditedManually="false">
-    <OptionsSetting value="true" id="Add" />
-    <OptionsSetting value="true" id="Remove" />
-    <OptionsSetting value="true" id="Checkout" />
-    <OptionsSetting value="true" id="Update" />
-    <OptionsSetting value="true" id="Status" />
-    <OptionsSetting value="true" id="Edit" />
-    <ConfirmationsSetting value="0" id="Add" />
-    <ConfirmationsSetting value="0" id="Remove" />
-  </component>
+  <component name="ProjectId" id="2LxHd5upSId0cQxPQvXM8lyppL3" />
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
       <flattenPackages />
@@ -256,13 +191,17 @@
       <pane id="Scratches" />
     </panes>
   </component>
-  <component name="PropertiesComponent">
-    <property name="settings.editor.selected.configurable" value="File.Encoding" />
-    <property name="settings.editor.splitter.proportion" value="0.23648648" />
-    <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="js-jscs-nodeInterpreter" value="/usr/local/bin/node" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
   </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "C:/xampp/htdocs/userManager",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
@@ -272,48 +211,25 @@
       <recent name="$PROJECT_DIR$/css" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/includes" />
-      <recent name="$PROJECT_DIR$/Documentation" />
-      <recent name="$PROJECT_DIR$/docs/videos/homepageSlidevideo" />
-      <recent name="$PROJECT_DIR$/docs/videos/Example video folder" />
+      <recent name="C:\xampp\htdocs\userManager" />
+      <recent name="C:\xampp\htdocs\userManager\classes" />
+      <recent name="C:\xampp\htdocs\userManager\assets\js" />
+      <recent name="C:\xampp\htdocs\userManager\assets\images" />
+      <recent name="C:\xampp\htdocs\userManager\assets\css" />
     </key>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
-      <method />
-    </configuration>
-    <configuration default="true" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
-      <TestRunner />
-      <method />
-    </configuration>
-    <configuration default="true" type="PhpBehatConfigurationType" factoryName="Behat">
-      <BehatRunner />
-      <method />
-    </configuration>
-    <configuration default="true" type="PhpLocalRunConfigurationType" factoryName="PHP Console">
-      <method />
-    </configuration>
-    <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
+    <configuration default="true" type="js.build_tools.gulp">
       <node-interpreter>project</node-interpreter>
       <node-options />
       <gulpfile />
       <tasks />
       <arguments />
       <envs />
-      <method />
-    </configuration>
-    <configuration default="true" type="js.build_tools.npm" factoryName="npm">
-      <command value="run-script" />
-      <scripts />
-      <node-interpreter value="project" />
-      <envs />
-      <method />
+      <method v="2" />
     </configuration>
   </component>
-  <component name="ShelveChangesManager" show_recycled="false">
-    <option name="remove_strategy" value="false" />
-  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -389,6 +305,7 @@
       <workItem from="1657371351713" duration="14000" />
       <workItem from="1657469696720" duration="425000" />
       <workItem from="1661038823914" duration="11756000" />
+      <workItem from="1676805917259" duration="10950000" />
     </task>
     <servers />
   </component>
@@ -419,6 +336,20 @@
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="Vcs.Log.UiProperties">
     <option name="RECENTLY_FILTERED_USER_GROUPS">
       <collection />
@@ -426,9 +357,6 @@
     <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
       <collection />
     </option>
-  </component>
-  <component name="VcsContentAnnotationSettings">
-    <option name="myLimit" value="2678400000" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -444,9 +372,7 @@
           <option name="timeStamp" value="232" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="298" />
     </breakpoint-manager>
-    <watches-manager />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/controllers/adminController.php" />

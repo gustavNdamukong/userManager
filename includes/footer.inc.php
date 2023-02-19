@@ -31,10 +31,10 @@
 			<section class="col-md-12 col-md-6 col-md-2">
 				<div class="contents social">
 					<ul class="social">
-						<li><a href="#"><img src='images/rss.gif' width="30" height="30" alt="RSS" /></a></li>
-						<li><a href="#"><img src='images/youtube_icon.png' alt="Youtube" /></a></li>
-						<li><a href="#"><img src='images/facebook_icon.png' alt="Facebook" /></a></li>
-						<li><a href="#"><img src='images/twitter_icon.png' alt="twitter" /></a></li>
+						<li><a href="#"><img src='/userManager/assets/images/rss.gif' width="30" height="30" alt="RSS" /></a></li>
+						<li><a href="#"><img src='/userManager/assets/images/youtube_icon.png' alt="Youtube" /></a></li>
+						<li><a href="#"><img src='/userManager/assets/images/facebook_icon.png' alt="Facebook" /></a></li>
+						<li><a href="#"><img src='/userManager/assets/images/twitter_icon.png' alt="twitter" /></a></li>
 					</ul>
 				</div>
 				<div class="handle"></div>

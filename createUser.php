@@ -1,38 +1,41 @@
 <?php
 
-require_once('./includes/authenticate.inc.php');
-require_once('./includes/adminController.php');
-require_once('./includes/Validator.php');
-require_once('./includes/Users.php');
-require_once('./includes/DB_Adapter.php');
+use classes\Messenger;
+use config\Config;
 
-$validator = new Validator();
-$user = new Users;
+require_once('./includes/authenticate.inc.php');
+include_once "autoloader.php";
+
+$validator = new classes\Validator();
+$user = new classes\Users;
+$config = new Config();
+$messenger = new Messenger();
 $user->setValidator($validator);
-$adminController = new \adminController($validator, $user);
+$adminController = new classes\adminController($validator, $user, $config, $messenger);
 
 //only admin users allowed here
 if ($_SESSION['user_type'] != 'admin')
 {
-	header('Location: /userManager/dashboard.php?notAdmin=1');
-	exit();
+    header('Location: /dashboard.php?notAdmin=1');
+    exit();
 }
 
 if (isset($_GET['uid']))
 {
-	$userId = $_GET['uid'];
-	$userForEdit = $user->getUserById($userId);
+    $userId = $_GET['uid'];
+    $userForEdit = $user->getUserById($userId);
 }
 
 //handle creating a user
 if (isset($_POST['createUser'])) {
-	$user->createUser($_POST);
+    $user->createUser($_POST);
 }
 
 //handle editing a user
 if (isset($_POST['editUser'])) {
-	$user->editUser($_POST);
-} ?>
+    $user->editUser($_POST);
+}
+?>
 <!DOCTYPE HTML>
 <html lang="en-gb">
 <head>
@@ -42,11 +45,11 @@ if (isset($_POST['editUser'])) {
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width">
 	<title>User manager</title>
-	<link rel="stylesheet" href="css/style.css" type="text/css">
-	<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="assets/css/style.css" type="text/css">
+	<link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-	<script src="js/selectivizr-min.js"></script>
-	<script src="js/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+	<script src="assets/js/selectivizr-min.js"></script>
+	<script src="assets/js/modernizr-2.6.2-respond-1.1.0.min.js"></script>
 	<!--[if Lt IE 9]>
         <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js">
         </script>
@@ -80,25 +83,25 @@ if (isset($_POST['editUser'])) {
 
 						<div class="col-lg-2"></div>
 						<div class="form col-lg-8">
-							<form action="" method="post">
-								<label for="user_type">User Type</label>
-								<select id="user_type" name="user_type" class="form-control" <?=((isset($userForEdit)) && $userForEdit[0]['users_id'] == $_SESSION['custo_id'])?"disabled='true' title='You ADMIN cannot change your own user type'":''?>>
-									<option value="">Choose user type</option>
-									<option <?=((isset($userForEdit)) && $userForEdit[0]['users_type'] == 'member')?"selected='true'":''?> value="member">Member</option>
-									<option <?=((isset($userForEdit)) && $userForEdit[0]['users_type'] == 'admin')?"selected='true'":''?> value="admin">Admin</option>
-								</select>
+                            <form action="" method="post">
+                                <label for="user_type">User Type</label>
+                                <select id="user_type" name="user_type" class="form-control" <?=((isset($userForEdit)) && $userForEdit[0]['users_id'] == $_SESSION['custo_id'])?"disabled='true' title='You ADMIN cannot change your own user type'":''?>>
+                                    <option value="">Choose user type</option>
+                                    <option <?=((isset($userForEdit)) && $userForEdit[0]['users_type'] == 'member')?"selected='true'":''?> value="member">Member</option>
+                                    <option <?=((isset($userForEdit)) && $userForEdit[0]['users_type'] == 'admin')?"selected='true'":''?> value="admin">Admin</option>
+                                </select>
 
-								<label for="username">Username</label>
-								<input placeholder="Username" id="username" name="username" class="form-control" type="text" <?php if (isset($userForEdit)) { ?> value="<?=$userForEdit[0]['users_username']?>" <?php } ?> />
+                                <label for="username">Username</label>
+                                <input placeholder="Username" id="username" name="username" class="form-control" type="text" <?php if (isset($userForEdit)) { ?> value="<?=$userForEdit[0]['users_username']?>" <?php } ?> />
 
-								<label for="password">Password</label>
-								<input placeholder="Password" id="password" name="password" class="form-control" type="password" <?php if (isset($userForEdit)) { ?> value="<?=$userForEdit[0]['pass']?>" <?php } ?> />
-								<input id="userId" name="userId" type="hidden" <?php if (isset($userForEdit)) { ?> value="<?=$userForEdit[0]['users_id']?>" <?php } ?> />
-								<input type="hidden" id="createUser" <?php if (isset($_GET['ed'])) { ?> name="editUser" <?php } else { ?> name="createUser" <?php } ?>>
-								<br>
-								<a href="/userManager/dashboard.php" class="btn btn-warning btn-lg">Cancel</a>
-								<button type="submit" class="btn btn-primary btn-lg"><?=isset($_GET['ed'])?'Edit User':'Create User'?></button>
-							</form>
+                                <label for="password">Password</label>
+                                <input placeholder="Password" id="password" name="password" class="form-control" type="password" <?php if (isset($userForEdit)) { ?> value="<?=$userForEdit[0]['pass']?>" <?php } ?> />
+                                <input id="userId" name="userId" type="hidden" <?php if (isset($userForEdit)) { ?> value="<?=$userForEdit[0]['users_id']?>" <?php } ?> />
+                                <input type="hidden" id="createUser" <?php if (isset($_GET['ed'])) { ?> name="editUser" <?php } else { ?> name="createUser" <?php } ?>>
+                                <br>
+                                <a href="/dashboard.php" class="btn btn-warning btn-lg">Cancel</a>
+                                <button type="submit" class="btn btn-primary btn-lg"><?=isset($_GET['ed'])?'Edit User':'Create User'?></button>
+                            </form>
 						</div>
 						<div class="col-lg-2"></div>
 					</div>
@@ -111,6 +114,6 @@ if (isset($_POST['editUser'])) {
 		<div class="clearer"></div>
 	</article>
 </div>
-<script src="js/bootstrap.min.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
 </body>
 </html>
