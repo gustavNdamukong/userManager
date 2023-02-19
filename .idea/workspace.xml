@@ -2,46 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="564ac0b6-082c-4df8-acb6-91f8a070cdf2" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/Autoloader.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Register.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/classes/CheckPassword.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/classes/DateConversion.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/classes/Messenger.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/classes/Model.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/classes/Users.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/classes/Validator.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/classes/adminController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/config/Config.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/user_manager.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/createUser.php" beforeDir="false" afterPath="$PROJECT_DIR$/createUser.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/css/bootstrap.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/assets/css/bootstrap.min.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/assets/css/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dashboard.php" beforeDir="false" afterPath="$PROJECT_DIR$/dashboard.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/drawerbg.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/drawerbg.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/facebook_icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/facebook_icon.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/footerbg.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/footerbg.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/pattern.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/pattern.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/rss.gif" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/rss.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/twitter_icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/twitter_icon.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/youtube_icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/youtube_icon.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/DB_Adapter.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/DateConversion.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/Users.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/Validator.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/adminController.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/footer.inc.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/footer.inc.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/header.inc.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/header.inc.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/settings.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/bootstrap.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/js/bootstrap.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/jquery-ui.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/js/jquery-ui.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/modernizr-2.6.2-respond-1.1.0.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/js/modernizr-2.6.2-respond-1.1.0.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/selectivizr-min.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/js/selectivizr-min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/login.php" beforeDir="false" afterPath="$PROJECT_DIR$/login.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/userManager.sql" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -305,7 +266,7 @@
       <workItem from="1657371351713" duration="14000" />
       <workItem from="1657469696720" duration="425000" />
       <workItem from="1661038823914" duration="11756000" />
-      <workItem from="1676805917259" duration="10950000" />
+      <workItem from="1676805917259" duration="11505000" />
     </task>
     <servers />
   </component>

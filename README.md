@@ -27,6 +27,8 @@
     -The mail verification sent to users after signing up would look something like this 
         (will differ depending on your application directory structure):
         http://localhost/userManager/classes/adminController.php?verifyEmail=1&em=05889cc1928ac7a8acaa9f3f6bd4f2a5
+
+    -The admin user is able to deactivate the registration feature from the config file.
         
         
 # Here is what the UI looks like
@@ -38,5 +40,5 @@
 
     -DB type used is a MySQL DB using mysqli queries
     -Create a database called 'user_manager'
-    -The sql file to populate the DB is found in the userManager.sql file
-    -The user credentials to use in setting up the DB are found in includes/settings.php
+    -The sql file to populate the DB is found in the user_manager.sql file
+    -The user credentials to use in setting up the DB are found in config/Config.php
